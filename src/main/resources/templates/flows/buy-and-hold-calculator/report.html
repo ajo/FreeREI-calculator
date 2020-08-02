@@ -42,11 +42,6 @@
                                                     <td th:if="${!purchaseInfo.isUsingLoan()}" th:text="${purchaseInfo.getPurchasePrice().add(purchaseInfo.getRepairCost())}" >Total</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Capitalization Rate:</td>
-                                                    <!-- Capitalization Rate = Net Operating Income / Current Market Value (max of purchase price / after repair value) -->
-                                                    <td th:text="${buyAndHoldDeal.getCapRate()}">Total</td>
-                                                </tr>
-                                                <tr>
                                                     <td>Total Rental Income:</td>
                                                     <td th:text="${buyAndHoldDeal.getIncomeAtMonth(buyAndHoldDeal.getDealLength() * 12, true)}">Total</td>
                                                 </tr>
