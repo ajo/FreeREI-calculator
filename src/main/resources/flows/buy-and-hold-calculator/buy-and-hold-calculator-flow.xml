@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.springframework.org/schema/webflow"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+    <var name="generalInfo" class="com.freerei.calculator.model.bahcalc.GeneralInfo"/>
+    <var name="purchaseInfo" class="com.freerei.calculator.model.bahcalc.PurchaseInfo"/>
+    <var name="expenseInfo" class="com.freerei.calculator.model.bahcalc.ExpenseInfo"/>
+    <var name="incomeInfo" class="com.freerei.calculator.model.bahcalc.IncomeInfo"/>
+
+    <!-- returning and adding inside flow buyAndHoldDeal instance -->
+    <on-start>
+        <evaluate expression="bahCalcHandler.init()"
+                  result="flowScope.buyAndHoldDeal"/>
+    </on-start>
+
+    <!-- General Info / Start-->
+    <view-state id="general" view="flows/buy-and-hold-calculator/general" model="generalInfo">
+        <transition on="purchase" to="purchase"/>
+        <on-exit>
+            <evaluate expression="bahCalcHandler.addGeneralInfo(flowScope.buyAndHoldDeal, generalInfo)"/>
+        </on-exit>
+    </view-state>
+
+    <!-- Purchase Info -->
+    <view-state id="purchase" view="flows/buy-and-hold-calculator/purchase" model="purchaseInfo">
+        <transition on="general" to="general"/>
+        <transition on="expense" to="validatePurchase"/>
+        <on-exit>
+            <evaluate expression="bahCalcHandler.addPurchaseInfo(flowScope.buyAndHoldDeal, purchaseInfo)"/>
+        </on-exit>
+    </view-state>
+    <action-state id="validatePurchase">
+        <evaluate expression="bahCalcHandler.validatePurchaseInfo(purchaseInfo, messageContext)"/>
+        <transition on="success" to="expense"/>
+        <transition on="failure" to="purchase"/>
+    </action-state>
+
+    <!-- Expense Info -->
+    <view-state id="expense" view="flows/buy-and-hold-calculator/expense" model="expenseInfo">
+        <transition on="purchase" to="purchase"/>
+        <transition on="income" to="income"/>
+        <on-exit>
+            <evaluate expression="bahCalcHandler.addExpenseInfo(flowScope.buyAndHoldDeal, expenseInfo)"/>
+        </on-exit>
+    </view-state>
+
+    <!-- Income Info -->
+    <view-state id="income" view="flows/buy-and-hold-calculator/income" model="incomeInfo">
+        <transition on="expense" to="expense"/>
+        <transition on="report" to="report"/>
+        <on-exit>
+            <evaluate expression="bahCalcHandler.addIncomeInfo(flowScope.buyAndHoldDeal, incomeInfo)"/>
+        </on-exit>
+    </view-state>
+
+    <!-- Report / Finish-->
+    <view-state id="report" view="flows/buy-and-hold-calculator/report" model="flowScope.buyAndHoldDeal">
+        <transition on="income" to="income"/>
+        <transition on="new" to="new"/>
+    </view-state>
+
+    <!-- end state -->
+    <end-state id="new" view="redirect:/buy-and-hold-calculator" />
+    <end-state id="home" view="redirect:/" />
+
+    <!-- Global Transition -->
+    <global-transitions>
+        <transition on="home" to="home" validate="false"/>
+    </global-transitions>
+
+</flow>

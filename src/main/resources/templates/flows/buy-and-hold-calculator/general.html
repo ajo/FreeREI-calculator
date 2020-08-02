@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <title>FreeREI - Buy And Hold Calculator</title>
+    <th:block th:replace="fragments/general :: css"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container d-xl-flex justify-content-center align-items-center align-content-center">
+    <form enctype="multipart/form-data" method="post" th:object="${generalInfo}">
+        <div class="border">
+            <div class="col">
+                <div class="row">
+                    <div class="col d-xl-flex justify-content-xl-center">
+                        <h1>General Info</h1>
+                    </div>
+                </div>
+                <div class="row d-flex d-xl-flex justify-content-end justify-content-xl-end">
+                    <div class="col-auto"><label class="col-form-label" for="title">Report Title</label></div>
+                    <div class="col-auto"><input id="title" class="form-control" th:field="*{title}" type="text"></div>
+                    <small class="form-text text-danger" th:errors="*{title}"
+                           th:if="${#fields.hasErrors('title')}"></small>
+                </div>
+                <div class="row d-flex d-xl-flex justify-content-end justify-content-xl-end">
+                    <div class="col-auto"><label class="col-form-label" for="address">Property Address</label></div>
+                    <div class="col-auto"><input id="address" class="form-control" th:field="*{address}" type="text"></div>
+                    <small class="form-text text-danger" th:errors="*{address}"
+                           th:if="${#fields.hasErrors('address')}"></small>
+                </div>
+                <div class="row d-xl-flex">
+                    <div class="col d-xl-flex justify-content-xl-center" style="margin-bottom: 1vh;margin-top: 1vh;">
+                        <button class="btn btn-primary" name="_eventId_purchase" type="submit">Next &raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<th:block th:replace="fragments/general :: js"></th:block>
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <title>FreeREI- Buy And Hold Calculator</title>
+    <th:block th:replace="fragments/general :: css"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div>
+        <div class="col d-sm-flex d-md-flex d-xl-flex justify-content-center justify-content-sm-center justify-content-md-center justify-content-xl-center">
+            <div class="row d-xl-flex">
+                <div class="border">
+                    <form enctype="multipart/form-data" method="post">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <h1 class="text-center" th:text="${generalInfo.getTitle()}">Report Title</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center" style="margin-bottom: 1vh;"><small th:text="${generalInfo.getAddress()}">Property Address</small></div>
+                        </div>
+                        <div class="row d-flex d-xl-flex justify-content-end justify-content-xl-end">
+                            <div class="col-auto">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <h4>Cumulative Results</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Cash Needed:</td>
+                                                    <td th:if="${purchaseInfo.isUsingLoan()}" th:text="${purchaseInfo.getDownPayment().add(purchaseInfo.getRepairCost())}" >Total</td>
+                                                    <td th:if="${!purchaseInfo.isUsingLoan()}" th:text="${purchaseInfo.getPurchasePrice().add(purchaseInfo.getRepairCost())}" >Total</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Capitalization Rate:</td>
+                                                    <!-- Capitalization Rate = Net Operating Income / Current Market Value (max of purchase price / after repair value) -->
+                                                    <td th:text="${buyAndHoldDeal.getCapRate()}">Total</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total Rental Income:</td>
+                                                    <td th:text="${buyAndHoldDeal.getIncomeAtMonth(buyAndHoldDeal.getDealLength() * 12, true)}">Total</td>
+                                                </tr>
+                                                <tr th:if="${purchaseInfo.isUsingLoan()}">
+                                                    <td>Mortgage Expenses:</td>
+                                                    <td th:text="${buyAndHoldDeal.getMortgagePayment().multiply(buyAndHoldDeal.getDealLength() * 12)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total Expenses:</td>
+                                                    <td th:text="${buyAndHoldDeal.getExpensesAtMonth(buyAndHoldDeal.getDealLength() * 12, true).abs()}">Total</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Net Operating Income:</td>
+                                                    <td th:text="${buyAndHoldDeal.getIncomeAtMonth(buyAndHoldDeal.getDealLength() * 12, true).subtract(buyAndHoldDeal.getExpensesAtMonth(buyAndHoldDeal.getDealLength() * 12, true).abs())}">Total</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <h4>Year One Results</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive table-bordered">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Monthly</th>
+                                                    <th>Yearly</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>Income:</td>
+                                                    <td th:text="${buyAndHoldDeal.getIncomeAtMonth(1, true)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getIncomeAtMonth(12, true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mortgage Expense:</td>
+                                                    <td th:text="${buyAndHoldDeal.getMortgagePayment()}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getMortgagePayment() * 12}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vacancy Expense:</td>
+                                                    <td th:text="${buyAndHoldDeal.getFlatRateGrowth(1, expenseInfo.getVacancyRateExpensePercentage(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getFlatRateGrowth(12, expenseInfo.getVacancyRateExpensePercentage(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Property Management:</td>
+                                                    <td th:text="${buyAndHoldDeal.getFlatRateGrowth(1, expenseInfo.getManagementExpensePercentage(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getFlatRateGrowth(12, expenseInfo.getManagementExpensePercentage(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Property Tax</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(1, expenseInfo.getTaxExpense(), expenseInfo.getTaxExpenseIncrease(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(12, expenseInfo.getTaxExpense(), expenseInfo.getTaxExpenseIncrease(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Insurance:</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(1, expenseInfo.getInsuranceExpense(), expenseInfo.getInsuranceExpenseIncrease(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(12, expenseInfo.getInsuranceExpense(), expenseInfo.getInsuranceExpenseIncrease(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Maintenance:</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(1, expenseInfo.getMaintenanceExpense(), expenseInfo.getMaintenanceExpenseIncrease(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(12, expenseInfo.getMaintenanceExpense(), expenseInfo.getMaintenanceExpenseIncrease(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Utility:</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(1, expenseInfo.getUtilityExpense(), expenseInfo.getUtilityExpenseIncrease(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(12, expenseInfo.getUtilityExpense(), expenseInfo.getUtilityExpenseIncrease(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Other:</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(1, expenseInfo.getOtherExpense(), expenseInfo.getOtherExpenseIncrease(), false)}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getCompoundGrowth(12, expenseInfo.getOtherExpense(), expenseInfo.getOtherExpenseIncrease(), true)}">Yearly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cash Flow:</td>
+                                                    <td th:text="${buyAndHoldDeal.getIncomeAtMonth(1, false).subtract(buyAndHoldDeal.getExpensesAtMonth(1, false).abs())}">Monthly</td>
+                                                    <td th:text="${buyAndHoldDeal.getIncomeAtMonth(12, true).subtract(buyAndHoldDeal.getExpensesAtMonth(12, true).abs())}">Yearly</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-xl-flex">
+                            <div class="col d-xl-flex justify-content-xl-center" style="margin-bottom: 1vh;margin-top: 1vh;">
+                                <button class="btn btn-secondary" name="_eventId_income" type="submit">« Back</button>
+                                <button class="btn btn-outline-danger" name="_eventId_home" type="submit" style="margin-left: 1vw;">Home</button>
+                                <button class="btn btn-outline-danger" name="_eventId_new" type="submit" style="margin-left: 1vw;">New Report</button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<th:block th:replace="fragments/general :: js"></th:block>
+</body>
+
+</html>

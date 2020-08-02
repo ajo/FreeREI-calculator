@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <title>FreeREI - 404</title>
+    <th:block th:replace="fragments/general :: css"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <h1 class="d-flex d-xl-flex justify-content-center justify-content-xl-center">404</h1>
+    <p class="d-flex d-xl-flex justify-content-center justify-content-xl-center">Lorem ipsum dolor sit amet.<br/></p>
+</div>
+<a class="d-flex d-xl-flex justify-content-center justify-content-xl-center" th:href="@{/}">Home</a>
+<div th:replace="fragments/footer :: footer"></div>
+<th:block th:replace="fragments/general :: js"></th:block>
+</body>
+</html>

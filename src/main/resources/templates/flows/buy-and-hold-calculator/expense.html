@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <title>FreeREI - Buy And Hold Calculator</title>
+    <th:block th:replace="fragments/general :: css"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container d-xl-flex justify-content-center align-items-center align-content-center">
+    <div class="border">
+        <form enctype="multipart/form-data" method="post" th:object="${expenseInfo}">
+            <div class="col">
+                <div class="row">
+                    <div class="col d-xl-flex justify-content-xl-center">
+                        <h1>Expenses</h1>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Property Tax</label></div>
+                    <div class="col-4 d-xl-flex">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{taxExpense}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{taxExpenseIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{taxExpense}"
+                               th:if="${#fields.hasErrors('taxExpense')}"></small>
+                        <small class="form-text text-danger" th:errors="*{taxExpenseIncrease}"
+                               th:if="${#fields.hasErrors('taxExpenseIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Insurance</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{insuranceExpense}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{insuranceExpenseIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{insuranceExpense}"
+                               th:if="${#fields.hasErrors('insuranceExpense')}"></small>
+                        <small class="form-text text-danger" th:errors="*{insuranceExpenseIncrease}"
+                               th:if="${#fields.hasErrors('insuranceExpenseIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Maintenance</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{maintenanceExpense}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{maintenanceExpenseIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{maintenanceExpense}"
+                               th:if="${#fields.hasErrors('maintenanceExpense')}"></small>
+                        <small class="form-text text-danger" th:errors="*{maintenanceExpenseIncrease}"
+                               th:if="${#fields.hasErrors('maintenanceExpenseIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Utilities</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{utilityExpense}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{utilityExpenseIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{utilityExpense}"
+                               th:if="${#fields.hasErrors('utilityExpense')}"></small>
+                        <small class="form-text text-danger" th:errors="*{utilityExpenseIncrease}"
+                               th:if="${#fields.hasErrors('utilityExpenseIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Other</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{otherExpense}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{otherExpenseIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{otherExpense}"
+                               th:if="${#fields.hasErrors('otherExpense')}"></small>
+                        <small class="form-text text-danger" th:errors="*{otherExpenseIncrease}"
+                               th:if="${#fields.hasErrors('otherExpenseIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Management Fee</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{managementExpensePercentage}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{managementExpensePercentage}"
+                               th:if="${#fields.hasErrors('managementExpensePercentage')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Vacancy Rate</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{vacancyRateExpensePercentage}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger"
+                               th:errors="*{vacancyRateExpensePercentage}"
+                               th:if="${#fields.hasErrors('vacancyRateExpensePercentage')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex">
+                    <div class="col d-xl-flex justify-content-xl-center" style="margin-bottom: 1vh;">
+                        <button class="btn btn-secondary" name="_eventId_purchase" type="submit">« Back</button>
+                        <button class="btn btn-primary" name="_eventId_income" type="submit">Next &raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<th:block th:replace="fragments/general :: js"></th:block>
+</body>
+</html>

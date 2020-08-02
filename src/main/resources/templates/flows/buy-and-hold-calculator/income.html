@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <title>FreeREI - Buy And Hold Calculator</title>
+    <th:block th:replace="fragments/general :: css"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container d-xl-flex justify-content-center align-items-center align-content-center">
+    <div class="border">
+        <form enctype="multipart/form-data" method="post" th:object="${incomeInfo}">
+            <div class="col">
+                <div class="row">
+                    <div class="col d-xl-flex justify-content-xl-center">
+                        <h1>Income</h1>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Rent</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{monthlyRentIncome}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{monthlyRentIncomeIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{monthlyRentIncome}"
+                               th:if="${#fields.hasErrors('monthlyRentIncome')}"></small>
+                        <small class="form-text text-danger" th:errors="*{monthlyRentIncomeIncrease}"
+                               th:if="${#fields.hasErrors('monthlyRentIncomeIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex justify-content-between justify-content-xl-start" style="margin-bottom: 1vh;">
+                    <div class="col-2 d-xl-flex"><label class="col-form-label">Other Income</label></div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input class="form-control" th:field="*{monthlyOtherIncome}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">Monthly</span></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend"></div>
+                            <input class="form-control" th:field="*{monthlyOtherIncomeIncrease}" type="text"/>
+                            <div class="input-group-append"><span class="input-group-text">%</span><span
+                                    class="input-group-text">Yearly Increase</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <small class="form-text text-danger" th:errors="*{monthlyOtherIncome}"
+                               th:if="${#fields.hasErrors('monthlyOtherIncome')}"></small>
+                        <small class="form-text text-danger" th:errors="*{monthlyOtherIncomeIncrease}"
+                               th:if="${#fields.hasErrors('monthlyOtherIncomeIncrease')}"></small>
+                    </div>
+                </div>
+                <div class="row d-xl-flex">
+                    <div class="col d-xl-flex justify-content-xl-center" style="margin-bottom: 1vh;">
+                        <button class="btn btn-secondary" name="_eventId_expense" type="submit">« Back</button>
+                        <button class="btn btn-primary" name="_eventId_report" type="submit">Next &raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<th:block th:replace="fragments/general :: js"></th:block>
+</body>
+
+</html>
