@@ -30,26 +30,27 @@ public class BahCalcHandler {
 
     public String validatePurchaseInfo(PurchaseInfo purchaseInfo, MessageContext error) {
 
-        // Down payment may not be greater than the purchase price
-        if (purchaseInfo.isUsingLoan() && purchaseInfo.getDownPayment().compareTo(purchaseInfo.getPurchasePrice()) > 0) {
+        if (!validateDownPayment(purchaseInfo)){
+
             error.addMessage(new MessageBuilder().
                     error()
                     .source("downPayment")
                     .defaultText("Down payment may not be greater than the purchase price.")
                     .build());
-
             return "failure";
         }
 
-        // If using a loan the term must be greater than 0, if not holding length must be greater than 0
-        if (purchaseInfo.isUsingLoan() && purchaseInfo.getLoanTerm() < 1) {
+        if (!validateTerm(purchaseInfo) && purchaseInfo.isUsingLoan()){
+
             error.addMessage(new MessageBuilder().
                     error()
                     .source("loanTerm")
                     .defaultText("Your loan may not be for 0 years")
                     .build());
             return "failure";
-        } else if (!purchaseInfo.isUsingLoan() && purchaseInfo.getYearsHeld() < 1) {
+
+        } else if (!validateTerm(purchaseInfo) && !purchaseInfo.isUsingLoan()) {
+
             error.addMessage(new MessageBuilder().
                     error()
                     .source("yearsHeld")
@@ -59,15 +60,45 @@ public class BahCalcHandler {
         }
 
         // After repair value may not be less than the purchase price.
-        if (purchaseInfo.isNeedsRepairs() && (purchaseInfo.getPurchasePrice().compareTo(purchaseInfo.getAfterRepairValue()) > 0)) {
+        if (!validateRepairValue(purchaseInfo)) {
+
             error.addMessage(new MessageBuilder()
                     .error()
                     .source("afterRepairValue")
                     .defaultText("After repair value may not be less than the purchase price.")
                     .build());
-
             return "failure";
         }
+
         return "success";
+    }
+
+    boolean validateDownPayment(PurchaseInfo purchaseInfo){
+
+        // Down payment may not be greater than the purchase price
+        if (purchaseInfo.isUsingLoan() && purchaseInfo.getDownPayment().compareTo(purchaseInfo.getPurchasePrice()) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+     boolean validateTerm(PurchaseInfo purchaseInfo){
+
+        // If using a loan the term must be greater than 0, if not holding length must be greater than 0
+        if (purchaseInfo.isUsingLoan() && purchaseInfo.getLoanTerm() < 1) {
+            return false;
+        } else if (!purchaseInfo.isUsingLoan() && purchaseInfo.getYearsHeld() < 1) {
+            return false;
+        }
+        return true;
+    }
+
+     boolean validateRepairValue(PurchaseInfo purchaseInfo){
+
+        // Down payment may not be greater than the purchase price
+        if (purchaseInfo.isNeedsRepairs() && (purchaseInfo.getPurchasePrice().compareTo(purchaseInfo.getAfterRepairValue()) > 0)) {
+            return false;
+        }
+        return true;
     }
 }
